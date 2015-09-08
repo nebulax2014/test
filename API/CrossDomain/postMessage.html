@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../../js/jquery-1.11.3.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            window.addEventListener('message', function (ev) {
+                //应该要检查消息来源
+                $('#msg_box').html(ev.origin + ' 发来消息：' + ev.data);
+
+                var w_h = ev.data;
+                //未做格式检查
+                $('#f').css('width', w_h.split(',')[0] + 'px');
+                $('#f').css('height', w_h.split(',')[1] + 'px');
+
+            }, false);
+
+            function p() {
+                var frame = window.frames[0];
+                frame.postMessage($('#msg').val(), 'http://localhost:63342/HTML5/API/CrossDomain/01.html');
+            }
+            $('#send').click(function () {
+                p();
+            });
+            setTimeout(p, 200);
+
+        });
+
+
+
+        var addEvent=(function(){
+            if(document.addEventListener){
+                return function(el,type,fn){
+                    if(el.length){
+                        for(var i=0;i<el.length;i++){
+                            addEvent(el[i],type,fn);
+                        }
+                    }else{
+                        el.addEventListener(type,fn,false);
+                    }
+                };
+            }else{
+                return function(el,type,fn){
+                    if(el.length){
+                        for(var i=0;i<el.length;i++){
+                            addEvent(el[i],type,fn);
+                        }
+                    }else{
+                        el.attachEvent('on'+type,function(){
+                            return fn.call(el,window.event);
+                        });
+                    }
+                };
+            }
+        })();
+
+function test()
+{console.log("message");}
+
+    </script>
+</head>
+<body>
+<input type="text" id="msg" />
+<button id="send">
+    发送信息</button>
+<iframe src="01.htmL" width="400" id="f"></iframe>
+<div id="msg_box">
+</div>
+</body>
+</html>

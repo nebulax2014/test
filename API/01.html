@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../../js/jquery-1.11.3.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var url = '';
+            var source = '';
+
+            window.addEventListener('message', function (ev) {
+                //此处需要做来源验证
+                if (ev.origin) { }
+                $('#msg').html(ev.origin + ' 发来消息：' + ev.data);
+                url = ev.origin;
+                source = ev.source;
+                //ev.source.postMessage('这里是：' + this.location, ev.origin);
+            });
+
+            $('#send').click(function () {
+                source.postMessage($('#w_h').val(), url);
+            });
+        });
+    </script>
+</head>
+<body>
+<div id='msg'>2</div>
+<input type="text" id="w_h" />
+<button id="send">
+    改变外层高度</button>
+</body>
+</html>
